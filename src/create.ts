@@ -1,8 +1,7 @@
 import * as path from 'path';
-import { tempFolder } from './fs/tempFolder';
-import { writeFile } from './fs/writeFile';
-import { readFile } from './fs/readFile';
-import { execScript } from './cmd/execScript';
+import * as fs from 'fs-extra';
+import { temp } from './temp';
+import { exec } from './exec';
 
 interface CreatePfxOptions {
   cert: Buffer | string;
@@ -15,15 +14,15 @@ function create({
   privateKey,
   password = '', // no password by default
 }: CreatePfxOptions) {
-  return tempFolder(async (tempPath) => {
+  return temp(async (tempPath) => {
     const certPath = path.resolve(tempPath, 'cert.crt');
     const privateKeyPath = path.resolve(tempPath, 'private.pem');
     const outPath = path.resolve(tempPath, 'output.pfx');
 
-    await writeFile(certPath, cert);
-    await writeFile(privateKeyPath, privateKey);
+    await fs.writeFile(certPath, cert);
+    await fs.writeFile(privateKeyPath, privateKey);
 
-    await execScript(`
+    await exec(`
       openssl pkcs12 \\
         -export \\
         -out ${outPath} \\
@@ -32,7 +31,7 @@ function create({
         -password "pass:${password}"
     `);
 
-    return await readFile(outPath);
+    return await fs.readFile(outPath);
   });
 }
 

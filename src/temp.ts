@@ -1,7 +1,7 @@
 import { dir } from 'tmp';
 import { remove } from 'fs-extra';
 
-function tempFolder(handler: (path: string) => Promise<any>): Promise<any> {
+function temp(handler: (path: string) => Promise<any>): Promise<any> {
   return new Promise((resolve, reject) => {
     dir((err, tempPath) => {
       if (err) {
@@ -19,5 +19,5 @@ function tempFolder(handler: (path: string) => Promise<any>): Promise<any> {
 }
 
 export {
-  tempFolder,
+  temp,
 };
