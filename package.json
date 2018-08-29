@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "start": "tsc --watch",
-    "build": "tsc && dts-generator --name @jmshal/pfx --project . --out lib/types.d.ts"
+    "build": "tsc",
+    "clean": "rm -rf ./lib",
+    "dts": "dts-generator --name @jmshal/pfx --project . --out lib/types.d.ts",
+    "version": "npm run clean && npm run build && npm run dts"
   },
   "files": [
     "lib"
